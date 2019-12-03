@@ -20,6 +20,9 @@ function Square(props) {
           }
         handleClick(i) {
             const squares = this.state.squares.slice();
+            if (calculateWinner(squares) || squares[i]) {
+                return;
+            }
             squares[i] = this.state.xIsNext ? 'X' : '0';
             this.setState({
                 squares: squares, 
@@ -37,7 +40,13 @@ function Square(props) {
     }
   
     render() {
-      const status = 'Next player: ' + (this.state.xIsNext ? 'X' : '0');
+        const winner = calculateWinner(this.state.squares);
+        let status;
+        if (winner) {
+            status = 'Winner: ' + winner;
+        } else {
+            status = 'Next player: ' +(this.state.xIsNext ? 'X' : '0');
+        }
   
       return (
         <div>
@@ -96,7 +105,7 @@ function Square(props) {
         [0, 4, 8],
         [2, 4, 6],
       ];
-      for (let i = 0 ; i <liens.length; i++) {
+      for (let i = 0 ; i <lines.length; i++) {
           const [a, b, c] = lines[i];
           if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
               return squares[a];
